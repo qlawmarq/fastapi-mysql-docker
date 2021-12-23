@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pyjwt
+passlib[bcrypt]
+pymysql
+cryptography
