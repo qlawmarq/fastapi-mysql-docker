@@ -1,12 +1,8 @@
-# fastapi-mysql-starter-with-auth
-
-A starter kit for FastAPI/MySQL applications that includes the Authentication(Sign-up/Sign-in) API.
-
-This app was created for prototyping purposes.
-Also, for knowledge sharing in team.
+# fastapi-mysql-docker
 
 - FastAPI
 - MySQL
+- Docker
 
 ## Setup
 
