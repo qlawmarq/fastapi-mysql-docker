@@ -53,6 +53,15 @@ For shutdown of the docker instance, please use following command:
 docker-compose down
 ```
 
+## Need a front-end app?
+
+If you need a front-end app for this server-side & DB server.
+
+You can clone the front-end template from:
+
+- https://github.com/masaiborg/expo-react-native-base
+- https://github.com/masaiborg/nuxt3-tailwind-sample-auth-app
+
 ## Note
 
 ### Python library packages
