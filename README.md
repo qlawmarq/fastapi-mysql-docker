@@ -8,14 +8,7 @@
 
 Please install `Docker` and `Docker compose` first.
 
-The following versions have been tested.
-
-```bash
-docker --version
-  Docker version 20.10.8, build 3967b7d
-docker-compose -v  
-  docker-compose version 1.29.2, build 5becea4c
-```
+https://www.docker.com/
 
 After installation, run the following command to create a local Docker container.
 
@@ -30,9 +23,12 @@ If you want to check the log while Docker container is running, then try to use 
 docker-compose up
 ```
 
-API server will start on http://localhost:8000.
-And DB server will start on http://localhost:3306.
-Also, you can check API document on http://localhost:8000/redoc.
+If Docker is running successfully, the API and DB server will be launched as shown in the following:
+
+- API server: http://localhost:8000
+- DB server: http://localhost:3306
+
+*Be careful, it won't work if the port is occupied by another application.*
 
 If you want to check docker is actually working, then you can check it with following command:
 
