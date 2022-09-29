@@ -3,4 +3,4 @@ uvicorn == 0.15.0
 pyjwt == 2.3.0
 passlib[bcrypt] == 1.7.4
 pymysql == 1.0.2
-cryptography == 36.0.1
+cryptography ==36.0.2
