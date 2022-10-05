@@ -79,3 +79,7 @@ When creating DB docker container, docker will create predefined tables in `mysq
 That help your team to control versions of database.
 
 The sample table definition has already been created with the name `create_user_table.sql`.
+
+### API documentation
+
+http://localhost:8000/redoc
