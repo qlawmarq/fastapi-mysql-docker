@@ -1,28 +1,16 @@
 from fastapi import HTTPException
-from pydantic import BaseModel
 from database.query import query_get, query_put, query_update
 from .auth import Auth
+from .models import UserModel
 
 auth_handler = Auth()
 
-class UserModel(BaseModel):
-    email: str
-    password: str
-    first_name: str
-    last_name: str
-
-class AuthModel(BaseModel):
-    email: str
-    password: str
-
-
 def register_user(user_model: UserModel):
-    user = query_get("SELECT * FROM user WHERE email = %s",(user_model.email))
+    user = get_user_by_email(user_model.email)
     if len(user) != 0:
-        print(user)
-        return 'Account already exists'
+        raise HTTPException(status_code=409, detail='Email user already exist.')
     hashed_password = auth_handler.encode_password(user_model.password)
-    user = query_put("""
+    query_put("""
                 INSERT INTO user (
                     first_name,
                     last_name,
@@ -37,10 +25,11 @@ def register_user(user_model: UserModel):
                     hashed_password
                 )
     )
-    return user
+    user = get_user_by_email(user_model.email)
+    return user[0]
 
 def signin_user(email, password):
-    user = query_get("SELECT * FROM user WHERE email = %s",(email))
+    user = get_user_by_email(email)
     if len(user) == 0:
         print('Invalid email')
         raise HTTPException(status_code=401, detail='Invalid email')
@@ -67,5 +56,29 @@ def update_user(user_model: UserModel):
                 user_model.email,
             )
         )
-        user = query_get("SELECT * FROM user WHERE email = %s",(user_model.email))
+        user = get_user_by_email(user_model.email)
         return user[0]
+
+def get_user_by_email(email: str):
+    user = query_get("""
+        SELECT 
+            user.id,
+            user.first_name,
+            user.last_name,
+            user.email,
+            user.password_hash
+        FROM user 
+        WHERE email = %s
+        """,(email))
+    return user
+
+def get_all_users():
+    user = query_get("""
+        SELECT  
+            user.id,
+            user.first_name,
+            user.last_name,
+            user.email
+        FROM user
+        """,())
+    return user
