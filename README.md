@@ -55,8 +55,9 @@ If you need a front-end app for this server-side & DB server.
 
 You can clone the front-end template from:
 
-- https://github.com/masaiborg/expo-react-native-base
 - https://github.com/masaiborg/nuxt3-tailwind-sample-auth-app
+- https://github.com/masaiborg/expo-react-native-base
+- https://github.com/cymagix/next-web-app-template
 
 ## Note
 
