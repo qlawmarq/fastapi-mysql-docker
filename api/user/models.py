@@ -1,8 +1,14 @@
 from pydantic import BaseModel, EmailStr
 
-class UserModel(BaseModel):
+class UserRequestModel(BaseModel):
     email: EmailStr
     password: str
+    first_name: str
+    last_name: str
+
+class UserResponseModel(BaseModel):
+    id: int
+    email: EmailStr
     first_name: str
     last_name: str
 
@@ -16,4 +22,4 @@ class TokenModel(BaseModel):
 
 class UserAuthResponseModel(BaseModel):
     token: TokenModel
-    user: UserModel
+    user: UserResponseModel

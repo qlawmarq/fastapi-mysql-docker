@@ -1,11 +1,11 @@
 from fastapi import HTTPException
 from database.query import query_get, query_put, query_update
 from .auth import Auth
-from .models import UserModel
+from .models import UserRequestModel
 
 auth_handler = Auth()
 
-def register_user(user_model: UserModel):
+def register_user(user_model: UserRequestModel):
     user = get_user_by_email(user_model.email)
     if len(user) != 0:
         raise HTTPException(status_code=409, detail='Email user already exist.')
@@ -38,7 +38,7 @@ def signin_user(email, password):
         raise HTTPException(status_code=401, detail='Invalid password')
     return user[0]
 
-def update_user(user_model: UserModel):
+def update_user(user_model: UserRequestModel):
         hashed_password = auth_handler.encode_password(user_model.password)
         query_put("""
             UPDATE user 

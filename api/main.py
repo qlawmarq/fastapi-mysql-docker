@@ -4,7 +4,7 @@ from database.query import query_get, query_put, query_update
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from user import Auth, UserAuthRequestModel, UserAuthResponseModel, UserModel, register_user, signin_user, update_user, get_all_users
+from user import Auth, UserAuthRequestModel, UserAuthResponseModel, UserRequestModel, UserResponseModel, register_user, signin_user, update_user, get_all_users
 
 app = FastAPI()
 
@@ -29,8 +29,8 @@ auth_handler = Auth()
 
 ########## Auth APIs ##########
 
-@app.post('/v1/signup', response_model=UserModel)
-def signup_api(user_details: UserModel):
+@app.post('/v1/signup', response_model=UserResponseModel)
+def signup_api(user_details: UserRequestModel):
     """
     This sign-up API allow you to register your account.
     """
@@ -59,7 +59,7 @@ def refresh_token_api(credentials: HTTPAuthorizationCredentials = Security(secur
 
 ########## Users APIs ##########
 
-@app.get("/v1/users", response_model=list[UserModel])
+@app.get("/v1/users", response_model=list[UserResponseModel])
 def get_all_users_api(credentials: HTTPAuthorizationCredentials = Security(security)):
     """
     This user update API allow you to update user data.
@@ -70,8 +70,8 @@ def get_all_users_api(credentials: HTTPAuthorizationCredentials = Security(secur
         return JSONResponse(status_code=200, content=jsonable_encoder(user))
     return JSONResponse(status_code=401, content={'error': 'Faild to authorize'})
 
-@app.post("/v1/user/update", response_model=UserModel)
-def update_user_api(user_details: UserModel, credentials: HTTPAuthorizationCredentials = Security(security)):
+@app.post("/v1/user/update", response_model=UserResponseModel)
+def update_user_api(user_details: UserRequestModel, credentials: HTTPAuthorizationCredentials = Security(security)):
     """
     This user update API allow you to update user data.
     """
