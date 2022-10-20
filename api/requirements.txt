@@ -1,6 +1,6 @@
 fastapi ==0.85.1
 uvicorn == 0.18.3
-pyjwt == 2.5.0
+pyjwt ==2.6.0
 passlib[bcrypt] == 1.7.4
 pymysql == 1.0.2
 cryptography == 38.0.1
