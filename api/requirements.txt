@@ -3,5 +3,5 @@ uvicorn == 0.18.3
 pyjwt == 2.5.0
 passlib[bcrypt] == 1.7.4
 pymysql == 1.0.2
-cryptography == 38.0.1
+cryptography ==38.0.3
 pydantic[email] == 1.10.2
