@@ -5,10 +5,12 @@ from .models import UserRequestModel
 
 auth_handler = Auth()
 
+
 def register_user(user_model: UserRequestModel):
     user = get_user_by_email(user_model.email)
     if len(user) != 0:
-        raise HTTPException(status_code=409, detail='Email user already exist.')
+        raise HTTPException(
+            status_code=409, detail='Email user already exist.')
     hashed_password = auth_handler.encode_password(user_model.password)
     query_put("""
                 INSERT INTO user (
@@ -18,15 +20,16 @@ def register_user(user_model: UserRequestModel):
                     password_hash
                 ) VALUES (%s,%s,%s,%s)
                 """,
-                (
-                    user_model.first_name,
-                    user_model.last_name,
-                    user_model.email,
-                    hashed_password
-                )
-    )
+              (
+                  user_model.first_name,
+                  user_model.last_name,
+                  user_model.email,
+                  hashed_password
+              )
+              )
     user = get_user_by_email(user_model.email)
     return user[0]
+
 
 def signin_user(email, password):
     user = get_user_by_email(email)
@@ -38,9 +41,10 @@ def signin_user(email, password):
         raise HTTPException(status_code=401, detail='Invalid password')
     return user[0]
 
+
 def update_user(user_model: UserRequestModel):
-        hashed_password = auth_handler.encode_password(user_model.password)
-        query_put("""
+    hashed_password = auth_handler.encode_password(user_model.password)
+    query_put("""
             UPDATE user 
                 SET first_name = %s,
                     last_name = %s,
@@ -48,16 +52,17 @@ def update_user(user_model: UserRequestModel):
                     password_hash = %s 
                 WHERE user.email = %s;
             """,
-            (
-                user_model.first_name,
-                user_model.last_name,
-                user_model.email,
-                hashed_password,
-                user_model.email,
-            )
-        )
-        user = get_user_by_email(user_model.email)
-        return user[0]
+              (
+                  user_model.first_name,
+                  user_model.last_name,
+                  user_model.email,
+                  hashed_password,
+                  user_model.email,
+              )
+              )
+    user = get_user_by_email(user_model.email)
+    return user[0]
+
 
 def get_user_by_email(email: str):
     user = query_get("""
@@ -69,8 +74,9 @@ def get_user_by_email(email: str):
             user.password_hash
         FROM user 
         WHERE email = %s
-        """,(email))
+        """, (email))
     return user
+
 
 def get_all_users():
     user = query_get("""
@@ -80,5 +86,5 @@ def get_all_users():
             user.last_name,
             user.email
         FROM user
-        """,())
+        """, ())
     return user
