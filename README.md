@@ -28,7 +28,7 @@ If Docker is running successfully, the API and DB server will be launched as sho
 - API server: http://localhost:8000
 - DB server: http://localhost:3306
 
-*Be careful, it won't work if the port is occupied by another application.*
+_Be careful, it won't work if the port is occupied by another application._
 
 If you want to check docker is actually working, then you can check it with following command:
 

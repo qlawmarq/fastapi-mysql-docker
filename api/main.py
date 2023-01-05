@@ -29,6 +29,7 @@ auth_handler = Auth()
 
 ########## Auth APIs ##########
 
+
 @app.post('/v1/signup', response_model=UserResponseModel)
 def signup_api(user_details: UserRequestModel):
     """
@@ -36,6 +37,7 @@ def signup_api(user_details: UserRequestModel):
     """
     user = register_user(user_details)
     return JSONResponse(status_code=200, content=jsonable_encoder(user))
+
 
 @app.post('/v1/signin', response_model=UserAuthResponseModel)
 def signin_api(user_details: UserAuthRequestModel):
@@ -47,12 +49,12 @@ def signin_api(user_details: UserAuthRequestModel):
     refresh_token = auth_handler.encode_refresh_token(user['email'])
     return JSONResponse(status_code=200, content={'token': {'access_token': access_token, 'refresh_token': refresh_token}, 'user': user})
 
+
 @app.get('/v1/refresh-token')
-def refresh_token_api(credentials: HTTPAuthorizationCredentials = Security(security)):
+def refresh_token_api(refresh_token: str):
     """
     This refresh-token API allow you to obtain new access token.
     """
-    refresh_token = credentials.credentials
     new_token = auth_handler.refresh_token(refresh_token)
     return {'access_token': new_token}
 
@@ -65,10 +67,11 @@ def get_all_users_api(credentials: HTTPAuthorizationCredentials = Security(secur
     This user update API allow you to update user data.
     """
     token = credentials.credentials
-    if(auth_handler.decode_token(token)):
+    if (auth_handler.decode_token(token)):
         user = get_all_users()
         return JSONResponse(status_code=200, content=jsonable_encoder(user))
     return JSONResponse(status_code=401, content={'error': 'Faild to authorize'})
+
 
 @app.post("/v1/user/update", response_model=UserResponseModel)
 def update_user_api(user_details: UserRequestModel, credentials: HTTPAuthorizationCredentials = Security(security)):
@@ -76,7 +79,7 @@ def update_user_api(user_details: UserRequestModel, credentials: HTTPAuthorizati
     This user update API allow you to update user data.
     """
     token = credentials.credentials
-    if(auth_handler.decode_token(token)):
+    if (auth_handler.decode_token(token)):
         user = update_user(user_details)
         return JSONResponse(status_code=200, content=jsonable_encoder(user))
     return JSONResponse(status_code=401, content={'error': 'Faild to authorize'})
@@ -90,8 +93,9 @@ def secret_data_api(credentials: HTTPAuthorizationCredentials = Security(securit
     This secret API is just for testing. Need access token to access this API.
     """
     token = credentials.credentials
-    if(auth_handler.decode_token(token)):
+    if (auth_handler.decode_token(token)):
         return 'Top Secret data only authorized users can access this info'
+
 
 @app.get('/not-secret')
 def not_secret_data_api():
