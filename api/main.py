@@ -36,7 +36,9 @@ def signup_api(user_details: UserRequestModel):
     This sign-up API allow you to register your account.
     """
     user = register_user(user_details)
-    return JSONResponse(status_code=200, content=jsonable_encoder(user))
+    access_token = auth_handler.encode_token(user_details.email)
+    refresh_token = auth_handler.encode_refresh_token(user_details.email)
+    return JSONResponse(status_code=200, content={'token': {'access_token': access_token, 'refresh_token': refresh_token}, 'user': user})
 
 
 @app.post('/v1/signin', response_model=UserAuthResponseModel)
