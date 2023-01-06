@@ -1,12 +1,12 @@
 from fastapi import HTTPException
 from database.query import query_get, query_put, query_update
 from .auth import Auth
-from .models import UserRequestModel
+from .models import UserUpdateRequestModel
 
 auth_handler = Auth()
 
 
-def register_user(user_model: UserRequestModel):
+def register_user(user_model: UserUpdateRequestModel):
     user = get_user_by_email(user_model.email)
     if len(user) != 0:
         raise HTTPException(
@@ -42,7 +42,7 @@ def signin_user(email, password):
     return user[0]
 
 
-def update_user(user_model: UserRequestModel):
+def update_user(user_model: UserUpdateRequestModel):
     hashed_password = auth_handler.encode_password(user_model.password)
     query_put("""
             UPDATE user 
@@ -64,6 +64,18 @@ def update_user(user_model: UserRequestModel):
     return user[0]
 
 
+def get_all_users():
+    user = query_get("""
+        SELECT  
+            user.id,
+            user.first_name,
+            user.last_name,
+            user.email
+        FROM user
+        """, ())
+    return user
+
+
 def get_user_by_email(email: str):
     user = query_get("""
         SELECT 
@@ -78,13 +90,14 @@ def get_user_by_email(email: str):
     return user
 
 
-def get_all_users():
+def get_user_by_id(id: int):
     user = query_get("""
-        SELECT  
+        SELECT 
             user.id,
             user.first_name,
             user.last_name,
-            user.email
-        FROM user
-        """, ())
+            user.email,
+        FROM user 
+        WHERE id = %s
+        """, (id))
     return user

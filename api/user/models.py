@@ -1,7 +1,19 @@
 from pydantic import BaseModel, EmailStr
 
 
-class UserRequestModel(BaseModel):
+class SignInRequestModel(BaseModel):
+    email: str
+    password: str
+
+
+class SignUpRequestModel(BaseModel):
+    email: EmailStr
+    password: str
+    first_name: str
+    last_name: str
+
+
+class UserUpdateRequestModel(BaseModel):
     email: EmailStr
     password: str
     first_name: str
@@ -13,11 +25,6 @@ class UserResponseModel(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
-
-
-class UserAuthRequestModel(BaseModel):
-    email: str
-    password: str
 
 
 class TokenModel(BaseModel):
