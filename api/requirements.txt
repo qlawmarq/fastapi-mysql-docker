@@ -1,7 +1,7 @@
-fastapi ==0.92.0
-uvicorn == 0.20.0
-pyjwt == 2.6.0
-passlib[bcrypt] == 1.7.4
-pymysql == 1.0.2
-cryptography ==39.0.1
-pydantic[email] == 1.10.4
+fastapi==0.92.0
+uvicorn==0.20.0
+pyjwt==2.6.0
+passlib[bcrypt]==1.7.4
+pymysql==1.0.2
+cryptography==39.0.1
+pydantic[email]==1.10.4
