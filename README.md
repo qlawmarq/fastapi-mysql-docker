@@ -81,6 +81,12 @@ That help your team to control versions of database.
 
 The sample table definition has already been created with the name `create_user_table.sql`.
 
+### Save the local DB changes as a dump file
+
+```bash
+docker-compose exec database mysqldump -u root -p fastapi_app > mysql/db/dump.sql
+```
+
 ### API documentation
 
 http://localhost:8000/redoc

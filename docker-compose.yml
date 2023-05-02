@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   mysql:
     container_name: mysql
@@ -8,9 +8,9 @@ services:
       - "3306:3306"
     volumes:
       - ./mysql/db:/docker-entrypoint-initdb.d
-    environment:
-      - MYSQL_ROOT_PASSWORD=archmage
-      - MYSQL_DATABASE=fastapi_app
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    env_file:
+      - ./api/local-docker.env
     tty: true
   api:
     depends_on:
@@ -18,15 +18,11 @@ services:
     container_name: fast_api
     platform: linux/x86_64
     build: ./api
-    restart: always
+    restart: unless-stopped
     tty: true
     volumes:
       - ./api:/app
     ports:
       - 8000:8000
-    environment:
-      - APP_SECRET_STRING=archmage
-      - DATABASE_USERNAME=root
-      - DATABASE_PASSWORD=archmage
-      - DATABASE=fastapi_app
-      - DATABASE_HOST=mysql
+    env_file:
+      - ./api/local-docker.env
