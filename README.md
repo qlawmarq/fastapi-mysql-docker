@@ -61,6 +61,36 @@ You can clone the front-end template from:
 
 ## Note
 
+### How to check the DB tables in container
+
+You can check the DB data by actually executing a query using the following command:
+
+```bash
+docker-compose exec mysql bash
+mysql -u root -p
+mysql> USE fastapi_app;
+mysql> SHOW TABLES;
+```
+
+### How to add a library
+
+You may want to add libraries such as requests, in which case follow these steps:
+
+- Add the library to requirements.txt
+
+e.g., if you want to add `requests`:
+
+```
+requests==2.30.0
+```
+
+Then try a re-build and see.
+
+```
+docker-compose build
+docker-compose up
+```
+
 ### Python library packages
 
 Some of the Python packages used in this app are defined in `api/requirements.txt`.
