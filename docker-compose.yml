@@ -10,7 +10,7 @@ services:
       - ./mysql/db:/docker-entrypoint-initdb.d
       - ./mysql/conf.d:/etc/mysql/conf.d
     env_file:
-      - ./api/local-docker.env
+      - ./mysql/local-docker.env
     tty: true
   api:
     depends_on:
