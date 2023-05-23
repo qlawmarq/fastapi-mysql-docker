@@ -4,4 +4,4 @@ pyjwt==2.7.0
 passlib[bcrypt]==1.7.4
 pymysql==1.0.2
 cryptography==40.0.2
-pydantic[email]==1.10.7
+pydantic[email]==1.10.8
