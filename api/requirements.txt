@@ -1,4 +1,4 @@
-fastapi==0.96.0
+fastapi==0.96.1
 uvicorn==0.22.0
 pyjwt==2.7.0
 passlib[bcrypt]==1.7.4
