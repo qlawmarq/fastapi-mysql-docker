@@ -61,6 +61,19 @@ You can clone the front-end template from:
 
 ## Note
 
+### How to enable Python code formatter (black) and linter (flake8) with VSCode extension
+
+If you're [VS Code](https://code.visualstudio.com/) user, you can easily setup Python code formatter (black) and linter (flake8) by simply installing the extensions.
+
+Automatic formatting settings have already been defined here:
+
+`.vscode/settings.json`
+
+Just install following:
+
+- [Black Formatter](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter)
+- [Flake8](https://marketplace.visualstudio.com/items?itemName=ms-python.flake8)
+
 ### How to check the DB tables in container
 
 You can check the DB data by actually executing a query using the following command:
