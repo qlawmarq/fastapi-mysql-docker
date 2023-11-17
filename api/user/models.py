@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr
 
 
 class UserUpdateRequestModel(BaseModel):
+    id: int
     email: EmailStr
     password: str
     first_name: str

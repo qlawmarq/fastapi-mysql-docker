@@ -3,7 +3,7 @@ from fastapi.security import HTTPBearer
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from auth.provider import Auth
-from user.controllers import (
+from auth.controllers import (
     register_user,
     signin_user,
 )
