@@ -15,7 +15,7 @@ def init_connection():
         password=os.getenv("DATABASE_PASSWORD", "root"),
         database=os.getenv("DATABASE", "fastapi_app"),
         cursorclass=pymysql.cursors.DictCursor,
-        conv=converions,
+        conv=conversions,
     )
     return connection
 
