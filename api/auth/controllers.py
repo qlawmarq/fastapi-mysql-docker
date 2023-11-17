@@ -28,16 +28,18 @@ def register_user(user_model: SignUpRequestModel):
             hashed_password,
         ),
     )
-    user = get_user_by_email(user_model.email)
-    if len(user) == 0:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user[0]
+    return {
+        "first_name": user_model.first_name,
+        "last_name": user_model.last_name,
+        "email": user_model.email,
+        # Do not return the password hash or any sensitive information
+    }
 
 
 def signin_user(email, password):
     user = get_user_by_email(email)
     if len(user) == 0:
-        raise HTTPException(status_code=401, detail="Invalid email")
-    if not auth_handler.verify_password(password, user[0]["password_hash"]):
-        raise HTTPException(status_code=401, detail="Invalid password")
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    elif not auth_handler.verify_password(password, user[0]["password_hash"]):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
     return user[0]

@@ -21,7 +21,7 @@ def init_connection():
         password=password,
         database=database,
         cursorclass=pymysql.cursors.DictCursor,
-        conv=converions,
+        conv=conversions,
     )
     return connection
 
