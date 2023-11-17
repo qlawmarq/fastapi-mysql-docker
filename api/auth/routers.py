@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from fastapi.security import HTTPBearer
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
@@ -28,7 +28,7 @@ def signup_api(user_details: SignUpRequestModel):
     access_token = auth_handler.encode_token(user_details.email)
     refresh_token = auth_handler.encode_refresh_token(user_details.email)
     return JSONResponse(
-        status_code=200,
+        status_code=status.HTTP_201_CREATED,
         content=jsonable_encoder(
             {
                 "token": {"access_token": access_token, "refresh_token": refresh_token},
@@ -47,7 +47,7 @@ def signin_api(user_details: SignInRequestModel):
     access_token = auth_handler.encode_token(user["email"])
     refresh_token = auth_handler.encode_refresh_token(user["email"])
     return JSONResponse(
-        status_code=200,
+        status_code=status.HTTP_200_OK,
         content=jsonable_encoder(
             {
                 "token": {"access_token": access_token, "refresh_token": refresh_token},
@@ -64,6 +64,6 @@ def refresh_token_api(refresh_token: str):
     """
     new_token = auth_handler.refresh_token(refresh_token)
     return JSONResponse(
-        status_code=200,
+        status_code=status.HTTP_200_OK,
         content=jsonable_encoder({"access_token": new_token}),
     )

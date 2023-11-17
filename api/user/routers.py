@@ -26,9 +26,12 @@ def get_all_users_api(credentials: HTTPAuthorizationCredentials = Security(OAuth
     token = credentials.credentials
     if auth_handler.decode_token(token):
         user = get_all_users()
-        return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(user))
+        return JSONResponse(
+            status_code=status.HTTP_200_OK, content=jsonable_encoder(user)
+        )
     return JSONResponse(
-        status_code=status.HTTP_401_UNAUTHORIZED, content=jsonable_encoder({"error": "Failed to authorize"})
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        content=jsonable_encoder({"error": "Failed to authorize"}),
     )
 
 
@@ -42,9 +45,12 @@ def get_user_api(
     token = credentials.credentials
     if auth_handler.decode_token(token):
         user = get_user_by_id(user_id)
-        return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(user))
+        return JSONResponse(
+            status_code=status.HTTP_200_OK, content=jsonable_encoder(user)
+        )
     return JSONResponse(
-        status_code=status.HTTP_401_UNAUTHORIZED, content=jsonable_encoder({"error": "Failed to authorize"})
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        content=jsonable_encoder({"error": "Failed to authorize"}),
     )
 
 
@@ -59,7 +65,10 @@ def update_user_api(
     token = credentials.credentials
     if auth_handler.decode_token(token):
         user = update_user(user_details)
-        return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(user))
+        return JSONResponse(
+            status_code=status.HTTP_200_OK, content=jsonable_encoder(user)
+        )
     return JSONResponse(
-        status_code=status.HTTP_401_UNAUTHORIZED, content=jsonable_encoder({"error": "Failed to authorize"})
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        content=jsonable_encoder({"error": "Failed to authorize"}),
     )
