@@ -53,8 +53,7 @@ def get_user_by_email(email: str):
             user.id,
             user.first_name,
             user.last_name,
-            user.email,
-            user.password_hash
+            user.email
         FROM user
         WHERE email = %s
         """,
@@ -70,7 +69,7 @@ def get_user_by_id(id: int):
             user.id,
             user.first_name,
             user.last_name,
-            user.email,
+            user.email
         FROM user
         WHERE id = %s
         """,
