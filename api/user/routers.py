@@ -36,8 +36,9 @@ def get_user_api(user_id: int, current_user=Depends(auth_handler.get_current_use
     return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(user))
 
 
-@router.post("/v1/user/update", response_model=UserResponseModel)
+@router.put("/v1/user/{user_id}", response_model=UserResponseModel)
 def update_user_api(
+    user_id: int,
     user_details: UserUpdateRequestModel,
     current_user=Depends(auth_handler.get_current_user),
 ):
@@ -45,5 +46,5 @@ def update_user_api(
     This user update API allow you to update user data.
     """
     update_user(user_details)
-    user = get_user_by_id(user_details.id)
+    user = get_user_by_id(user_id)
     return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(user))

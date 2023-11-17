@@ -1,5 +1,10 @@
+# Git
+.git
+.github
+
 # API Server
 __pycache__
 
 # Front-end
 frontend
+node_modules

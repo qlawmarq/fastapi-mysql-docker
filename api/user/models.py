@@ -1,10 +1,11 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 
 class UserUpdateRequestModel(BaseModel):
     id: int
     email: EmailStr
-    password: str
+    password: Optional[str] = None
     first_name: str
     last_name: str
 

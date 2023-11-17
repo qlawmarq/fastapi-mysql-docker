@@ -14,25 +14,44 @@ def update_user(user_model: UserUpdateRequestModel):
             status_code=status.HTTP_409_CONFLICT,
             detail="Email is already in use by another user",
         )
-    # Update the user
-    hashed_password = auth_handler.get_password_hash(user_model.password)
-    return query_put(
-        """
-            UPDATE user
-                SET first_name = %s,
-                    last_name = %s,
-                    email = %s,
-                    password_hash = %s
-                WHERE user.id = %s;
-            """,
-        (
-            user_model.first_name,
-            user_model.last_name,
-            user_model.email,
-            hashed_password,
-            user_model.id,
-        ),
-    )
+    # Before updating the password, check if it has been changed
+    if user_model.password is not None:
+        hashed_password = auth_handler.get_password_hash(user_model.password)
+        # Update the user
+        return query_put(
+            """
+                UPDATE user
+                    SET first_name = %s,
+                        last_name = %s,
+                        email = %s,
+                        password_hash = %s
+                    WHERE user.id = %s;
+                """,
+            (
+                user_model.first_name,
+                user_model.last_name,
+                user_model.email,
+                hashed_password,
+                user_model.id,
+            ),
+        )
+    else:
+        # Update the user
+        return query_put(
+            """
+                UPDATE user
+                    SET first_name = %s,
+                        last_name = %s,
+                        email = %s
+                    WHERE user.id = %s;
+                """,
+            (
+                user_model.first_name,
+                user_model.last_name,
+                user_model.email,
+                user_model.id,
+            ),
+        )
 
 
 def get_all_users(limit: int = 10, offset: int = 0):
