@@ -9,11 +9,11 @@ converions[pymysql.FIELD_TYPE.BIT] = lambda x: False if x == b"\x00" else True
 
 def init_connection():
     connection = pymysql.connect(
-        host=os.getenv("DATABASE_HOST"),
+        host=os.getenv("DATABASE_HOST", "localhost"),
         port=3306,
-        user=os.environ.get("DATABASE_USERNAME"),
-        password=os.environ.get("DATABASE_PASSWORD"),
-        database=os.environ.get("DATABASE"),
+        user=os.getenv("DATABASE_USERNAME", "root"),
+        password=os.getenv("DATABASE_PASSWORD", "root"),
+        database=os.getenv("DATABASE", "fastapi_app"),
         cursorclass=pymysql.cursors.DictCursor,
         conv=converions,
     )

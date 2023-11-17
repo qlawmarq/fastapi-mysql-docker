@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 class Auth:
     hasher = CryptContext(schemes=["bcrypt"])
-    secret = os.getenv("APP_SECRET_STRING")
+    secret = os.getenv("APP_SECRET_STRING", "f805222c-e74d-4917-8e3b-d997d6c2e970")
 
     def encode_password(self, password):
         return self.hasher.hash(password)
