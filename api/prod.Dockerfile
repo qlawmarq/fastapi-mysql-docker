@@ -12,7 +12,6 @@ ENV DATABASE=fastapi_app
 ENV DATABASE_HOST=127.0.0.1
 ENV DATABASE_SOCKET=3306
 
-RUN pip install --upgrade pip
 COPY . .
 RUN pip install --no-cache-dir -r  requirements.txt
 

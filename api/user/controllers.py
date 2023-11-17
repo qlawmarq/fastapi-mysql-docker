@@ -8,7 +8,7 @@ auth_handler = AuthProvider()
 
 def update_user(user_model: UserUpdateRequestModel):
     # Check if the email is already in use by another user
-    existing_user = get_user_by_email(user_model.email)
+    existing_user = get_users_by_email(user_model.email)
     if len(existing_user) != 0 and existing_user[0]["id"] != user_model.id:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -70,7 +70,7 @@ def get_all_users(limit: int = 10, offset: int = 0):
     return user
 
 
-def get_user_by_email(email: str):
+def get_users_by_email(email: str):
     user = query_get(
         """
         SELECT
