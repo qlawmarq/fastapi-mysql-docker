@@ -7,6 +7,13 @@ auth_handler = Auth()
 
 
 def update_user(user_model: UserUpdateRequestModel):
+    # Check if the email is already in use by another user
+    existing_user = get_user_by_email(user_model.email)
+    if existing_user and existing_user.id != user_model.id:
+        raise HTTPException(
+            status_code=400, detail="Email is already in use by another user"
+        )
+    # Update the user
     hashed_password = auth_handler.encode_password(user_model.password)
     query_put(
         """

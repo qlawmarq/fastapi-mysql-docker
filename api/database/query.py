@@ -3,8 +3,8 @@ import pymysql.cursors
 from pymysql import converters
 
 
-converions = converters.conversions
-converions[pymysql.FIELD_TYPE.BIT] = lambda x: False if x == b"\x00" else True
+conversions = converters.conversions
+conversions[pymysql.FIELD_TYPE.BIT] = lambda x: False if x == b"\x00" else True
 
 
 def init_connection():
