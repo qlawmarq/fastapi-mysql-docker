@@ -1,3 +1,2 @@
-from .user import *
-from .auth import *
+from .controllers import *
 from .models import *
