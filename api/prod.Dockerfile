@@ -1,6 +1,6 @@
 # Dockerfile for production
 # NOTE: some of the ENV variables are just for example purposes. Update them to your own production values.
-FROM python:3.11-slim-bookworm
+FROM python:3.12-slim-bookworm
 
 WORKDIR /app
 
