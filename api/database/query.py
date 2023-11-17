@@ -12,8 +12,14 @@ def init_connection():
     user = os.getenv("DATABASE_USERNAME")
     password = os.getenv("DATABASE_PASSWORD")
     database = os.getenv("DATABASE")
-    if not host or not user or not password or not database:
-        raise EnvironmentError("Database environment variables not found")
+    if not host:
+        raise EnvironmentError("DATABASE_HOST environment variable not found")
+    if not user:
+        raise EnvironmentError("DATABASE_USERNAME environment variable not found")
+    if not password:
+        raise EnvironmentError("DATABASE_PASSWORD environment variable not found")
+    if not database:
+        raise EnvironmentError("DATABASE environment variable not found")
     connection = pymysql.connect(
         host=host,
         port=3306,
