@@ -35,7 +35,7 @@ def update_user(user_model: UserUpdateRequestModel):
     )
 
 
-def get_all_users():
+def get_all_users(limit: int = 10, offset: int = 0):
     user = query_get(
         """
         SELECT
@@ -44,8 +44,9 @@ def get_all_users():
             user.last_name,
             user.email
         FROM user
+        LIMIT %s OFFSET %s
         """,
-        (),
+        (limit, offset),
     )
     return user
 
