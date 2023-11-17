@@ -1,10 +1,10 @@
 from fastapi import HTTPException, status
 from database.query import query_put
-from auth.provider import Auth
+from auth.provider import AuthProvider
 from auth.models import SignUpRequestModel
 from user.controllers import get_user_by_email
 
-auth_handler = Auth()
+auth_handler = AuthProvider()
 
 
 def register_user(user_model: SignUpRequestModel):
@@ -13,7 +13,7 @@ def register_user(user_model: SignUpRequestModel):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Email already exists."
         )
-    hashed_password = auth_handler.encode_password(user_model.password)
+    hashed_password = auth_handler.get_password_hash(user_model.password)
     query_put(
         """
                 INSERT INTO user (
@@ -39,9 +39,10 @@ def register_user(user_model: SignUpRequestModel):
 
 
 def signin_user(email, password):
-    user = get_user_by_email(email)
+    user = auth_handler.get_user_by_email(email)
     if len(user) == 0:
         raise HTTPException(status_code=401, detail="Invalid email or password")
-    elif not auth_handler.verify_password(password, user[0]["password_hash"]):
+    elif not auth_handler.verify_password(password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid email or password")
-    return user[0]
+    del user["password_hash"]
+    return user

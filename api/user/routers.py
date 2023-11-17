@@ -1,8 +1,8 @@
-from fastapi import HTTPException, APIRouter, Security, status
+from fastapi import APIRouter, Depends, status
 from fastapi.encoders import jsonable_encoder
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security import HTTPBearer
 from fastapi.responses import JSONResponse
-from auth.provider import Auth
+from auth.provider import AuthProvider
 from user.controllers import (
     update_user,
     get_all_users,
@@ -15,64 +15,35 @@ from user.models import (
 
 router = APIRouter()
 OAuth2 = HTTPBearer()
-auth_handler = Auth()
+auth_handler = AuthProvider()
 
 
 @router.get("/v1/users", response_model=list[UserResponseModel])
-def get_all_users_api(credentials: HTTPAuthorizationCredentials = Security(OAuth2)):
+def get_all_users_api(current_user=Depends(auth_handler.get_current_user)):
     """
     This users get API allow you to fetch all user data.
     """
-    token = credentials.credentials
-    if auth_handler.decode_token(token):
-        user = get_all_users()
-        return JSONResponse(
-            status_code=status.HTTP_200_OK, content=jsonable_encoder(user)
-        )
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=jsonable_encoder({"error": "Failed to authorize"}),
-        )
+    user = get_all_users()
+    return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(user))
 
 
 @router.get("/v1/user/{user_id}", response_model=UserResponseModel)
-def get_user_api(
-    user_id: int, credentials: HTTPAuthorizationCredentials = Security(OAuth2)
-):
+def get_user_api(user_id: int, current_user=Depends(auth_handler.get_current_user)):
     """
     This user API allow you to fetch specific user data.
     """
-    token = credentials.credentials
-    if auth_handler.decode_token(token):
-        user = get_user_by_id(user_id)
-        return JSONResponse(
-            status_code=status.HTTP_200_OK, content=jsonable_encoder(user)
-        )
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=jsonable_encoder({"error": "Failed to authorize"}),
-        )
+    user = get_user_by_id(user_id)
+    return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(user))
 
 
 @router.post("/v1/user/update", response_model=UserResponseModel)
 def update_user_api(
     user_details: UserUpdateRequestModel,
-    credentials: HTTPAuthorizationCredentials = Security(OAuth2),
+    current_user=Depends(auth_handler.get_current_user),
 ):
     """
     This user update API allow you to update user data.
     """
-    token = credentials.credentials
-    if auth_handler.decode_token(token):
-        update_user(user_details)
-        user = get_user_by_id(user_details.id)
-        return JSONResponse(
-            status_code=status.HTTP_200_OK, content=jsonable_encoder(user)
-        )
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=jsonable_encoder({"error": "Failed to authorize"}),
-        )
+    update_user(user_details)
+    user = get_user_by_id(user_details.id)
+    return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(user))

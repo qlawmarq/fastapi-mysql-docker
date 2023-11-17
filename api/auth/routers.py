@@ -2,7 +2,7 @@ from fastapi import APIRouter, status
 from fastapi.security import HTTPBearer
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from auth.provider import Auth
+from auth.provider import AuthProvider
 from auth.controllers import (
     register_user,
     signin_user,
@@ -16,7 +16,7 @@ from auth.models import (
 
 router = APIRouter()
 OAuth2 = HTTPBearer()
-auth_handler = Auth()
+auth_handler = AuthProvider()
 
 
 @router.post("/v1/signup", response_model=UserAuthResponseModel)

@@ -1,9 +1,9 @@
 from fastapi import HTTPException, status
 from database.query import query_get, query_put
-from auth.provider import Auth
+from auth.provider import AuthProvider
 from user.models import UserUpdateRequestModel
 
-auth_handler = Auth()
+auth_handler = AuthProvider()
 
 
 def update_user(user_model: UserUpdateRequestModel):
@@ -15,7 +15,7 @@ def update_user(user_model: UserUpdateRequestModel):
             detail="Email is already in use by another user",
         )
     # Update the user
-    hashed_password = auth_handler.encode_password(user_model.password)
+    hashed_password = auth_handler.get_password_hash(user_model.password)
     return query_put(
         """
             UPDATE user
