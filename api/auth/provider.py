@@ -38,26 +38,28 @@ class AuthProvider:
     REFRESH_TOKEN_EXPIRE_HOURS = 10
     PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.SECRET_KEY = os.getenv("APP_SECRET_STRING")
         if not self.SECRET_KEY:
             raise EnvironmentError("APP_SECRET_STRING environment variable not found")
 
-    def verify_password(self, plain_password, hashed_password):
+    def verify_password(self, plain_password, hashed_password) -> bool:
         return self.PWD_CONTEXT.verify(plain_password, hashed_password)
 
-    def get_password_hash(self, password):
+    def get_password_hash(self, password) -> str:
         return self.PWD_CONTEXT.hash(password)
 
-    def authenticate_user(self, user_email: str, password: str):
+    def authenticate_user(self, user_email: str, password: str) -> AuthUser:
         user = self.get_user_by_email(user_email)
         if not user:
-            return False
-        if not self.verify_password(password, user.hashed_password):
-            return False
+            raise USER_NOT_FOUND_EXCEPTION
+        if not self.verify_password(password, user["password_hash"]):
+            raise CREDENTIALS_EXCEPTION
         return user
 
-    def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
+    def create_access_token(
+        self, data: dict, expires_delta: timedelta | None = None
+    ) -> str:
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
@@ -67,7 +69,7 @@ class AuthProvider:
         encoded_jwt = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
         return encoded_jwt
 
-    def encode_token(self, user_email):
+    def encode_token(self, user_email) -> str:
         payload = {
             "exp": datetime.utcnow()
             + timedelta(days=0, minutes=self.TOKEN_EXPIRE_MINS),
@@ -77,7 +79,7 @@ class AuthProvider:
         }
         return jwt.encode(payload, self.SECRET_KEY, algorithm=self.ALGORITHM)
 
-    def refresh_token(self, refresh_token):
+    def refresh_token(self, refresh_token) -> str:
         try:
             payload = jwt.decode(
                 refresh_token, self.SECRET_KEY, algorithms=self.ALGORITHM
@@ -92,7 +94,7 @@ class AuthProvider:
         except jwt.InvalidTokenError:
             raise CREDENTIALS_EXCEPTION
 
-    def encode_refresh_token(self, user_email):
+    def encode_refresh_token(self, user_email) -> str:
         payload = {
             "exp": datetime.utcnow()
             + timedelta(days=0, hours=self.REFRESH_TOKEN_EXPIRE_HOURS),
@@ -102,7 +104,9 @@ class AuthProvider:
         }
         return jwt.encode(payload, self.SECRET_KEY, algorithm=self.ALGORITHM)
 
-    async def get_current_user(self, token: Annotated[str, Depends(OAUTH2_SCHEME)]):
+    async def get_current_user(
+        self, token: Annotated[str, Depends(OAUTH2_SCHEME)]
+    ) -> AuthUser:
         user = None
         try:
             payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
@@ -117,7 +121,7 @@ class AuthProvider:
             raise CREDENTIALS_EXCEPTION
         return user
 
-    def get_user_by_email(self, user_email: str):
+    def get_user_by_email(self, user_email: str) -> AuthUser:
         user = query_get(
             """
             SELECT

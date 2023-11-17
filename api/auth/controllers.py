@@ -2,13 +2,13 @@ from fastapi import HTTPException, status
 from database.query import query_put
 from auth.provider import AuthProvider
 from auth.models import SignUpRequestModel
-from user.controllers import get_user_by_email
+from user.controllers import get_users_by_email
 
 auth_handler = AuthProvider()
 
 
 def register_user(user_model: SignUpRequestModel):
-    user = get_user_by_email(user_model.email)
+    user = get_users_by_email(user_model.email)
     if len(user) != 0:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Email already exists."
@@ -39,14 +39,5 @@ def register_user(user_model: SignUpRequestModel):
 
 
 def signin_user(email, password):
-    user = auth_handler.get_user_by_email(email)
-    if len(user) == 0:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password"
-        )
-    elif not auth_handler.verify_password(password, user["password_hash"]):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password"
-        )
-    del user["password_hash"]
+    user = auth_handler.authenticate_user(email, password)
     return user

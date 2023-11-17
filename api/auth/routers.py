@@ -1,5 +1,4 @@
 from fastapi import APIRouter, status
-from fastapi.security import HTTPBearer
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from auth.provider import AuthProvider
@@ -15,7 +14,6 @@ from auth.models import (
 )
 
 router = APIRouter()
-OAuth2 = HTTPBearer()
 auth_handler = AuthProvider()
 
 
