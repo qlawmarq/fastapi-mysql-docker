@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Security, status
+from fastapi import HTTPException, APIRouter, Security, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.responses import JSONResponse
@@ -29,10 +29,11 @@ def get_all_users_api(credentials: HTTPAuthorizationCredentials = Security(OAuth
         return JSONResponse(
             status_code=status.HTTP_200_OK, content=jsonable_encoder(user)
         )
-    return JSONResponse(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        content=jsonable_encoder({"error": "Failed to authorize"}),
-    )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=jsonable_encoder({"error": "Failed to authorize"}),
+        )
 
 
 @router.get("/v1/user/{user_id}", response_model=UserResponseModel)
@@ -48,10 +49,11 @@ def get_user_api(
         return JSONResponse(
             status_code=status.HTTP_200_OK, content=jsonable_encoder(user)
         )
-    return JSONResponse(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        content=jsonable_encoder({"error": "Failed to authorize"}),
-    )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=jsonable_encoder({"error": "Failed to authorize"}),
+        )
 
 
 @router.post("/v1/user/update", response_model=UserResponseModel)
@@ -68,7 +70,8 @@ def update_user_api(
         return JSONResponse(
             status_code=status.HTTP_200_OK, content=jsonable_encoder(user)
         )
-    return JSONResponse(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        content=jsonable_encoder({"error": "Failed to authorize"}),
-    )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=jsonable_encoder({"error": "Failed to authorize"}),
+        )
