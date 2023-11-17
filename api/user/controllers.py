@@ -9,7 +9,7 @@ auth_handler = AuthProvider()
 def update_user(user_model: UserUpdateRequestModel):
     # Check if the email is already in use by another user
     existing_user = get_user_by_email(user_model.email)
-    if existing_user and existing_user.id != user_model.id:
+    if len(existing_user) != 0 and existing_user[0]["id"] != user_model.id:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Email is already in use by another user",
