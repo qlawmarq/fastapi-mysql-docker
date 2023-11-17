@@ -22,3 +22,7 @@ class TokenModel(BaseModel):
 class UserAuthResponseModel(BaseModel):
     token: TokenModel
     user: UserResponseModel
+
+
+class AccessTokenResponseModel(BaseModel):
+    access_token: str
