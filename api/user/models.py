@@ -1,23 +1,19 @@
-from pydantic import BaseModel, EmailStr
-
-
-class SignInRequestModel(BaseModel):
-    email: str
-    password: str
-
-
-class SignUpRequestModel(BaseModel):
-    email: EmailStr
-    password: str
-    first_name: str
-    last_name: str
+from pydantic import BaseModel, EmailStr, validator
+from typing import Optional
 
 
 class UserUpdateRequestModel(BaseModel):
+    id: int
     email: EmailStr
-    password: str
+    password: Optional[str] = None
     first_name: str
     last_name: str
+
+    @validator("password")
+    def empty_str_to_none(cls, v):
+        if v == "":
+            return None
+        return v
 
 
 class UserResponseModel(BaseModel):
@@ -25,13 +21,3 @@ class UserResponseModel(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
-
-
-class TokenModel(BaseModel):
-    access_token: str
-    refresh_token: str
-
-
-class UserAuthResponseModel(BaseModel):
-    token: TokenModel
-    user: UserResponseModel

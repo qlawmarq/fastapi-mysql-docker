@@ -17,7 +17,9 @@ services:
       - mysql
     container_name: fast_api
     platform: linux/x86_64
-    build: ./api
+    build:
+      context: ./api
+      dockerfile: dev.Dockerfile
     restart: unless-stopped
     tty: true
     volumes:

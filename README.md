@@ -1,10 +1,14 @@
 # fastapi-mysql-docker
 
+## Elements
+
 - FastAPI
 - MySQL
 - Docker
 
-## Setup
+---
+
+## Setup development environment
 
 Please install `Docker` and `Docker compose` first.
 
@@ -56,8 +60,8 @@ If you need a front-end app for this server-side & DB server.
 You can clone the front-end template from:
 
 - https://github.com/qlawmarq/nuxt3-tailwind-auth-app
-- https://github.com/qlawmarq/expo-react-native-base
-- https://github.com/qlawmarq/next-web-app-template
+
+---
 
 ## Note
 
