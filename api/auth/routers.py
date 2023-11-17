@@ -11,6 +11,7 @@ from auth.models import (
     UserAuthResponseModel,
     SignInRequestModel,
     SignUpRequestModel,
+    AccessTokenResponseModel,
 )
 
 router = APIRouter()
@@ -56,10 +57,13 @@ def signin_api(user_details: SignInRequestModel):
     )
 
 
-@router.get("/v1/refresh-token")
+@router.post("/v1/refresh-token", response_model=AccessTokenResponseModel)
 def refresh_token_api(refresh_token: str):
     """
     This refresh-token API allow you to obtain new access token.
     """
     new_token = auth_handler.refresh_token(refresh_token)
-    return jsonable_encoder({"access_token": new_token})
+    return JSONResponse(
+        status_code=200,
+        content=jsonable_encoder({"access_token": new_token}),
+    )
