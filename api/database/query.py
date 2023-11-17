@@ -8,12 +8,18 @@ converions[pymysql.FIELD_TYPE.BIT] = lambda x: False if x == b"\x00" else True
 
 
 def init_connection():
+    host = os.getenv("DATABASE_HOST")
+    user = os.getenv("DATABASE_USERNAME")
+    password = os.getenv("DATABASE_PASSWORD")
+    database = os.getenv("DATABASE")
+    if not host or not user or not password or not database:
+        raise EnvironmentError("Database environment variables not found")
     connection = pymysql.connect(
-        host=os.getenv("DATABASE_HOST", "localhost"),
+        host=host,
         port=3306,
-        user=os.getenv("DATABASE_USERNAME", "root"),
-        password=os.getenv("DATABASE_PASSWORD", "root"),
-        database=os.getenv("DATABASE", "fastapi_app"),
+        user=user,
+        password=password,
+        database=database,
         cursorclass=pymysql.cursors.DictCursor,
         conv=converions,
     )
