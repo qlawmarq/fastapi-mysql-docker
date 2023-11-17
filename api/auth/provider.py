@@ -9,10 +9,11 @@ from datetime import datetime, timedelta
 
 class Auth:
     hasher = CryptContext(schemes=["bcrypt"])
-    secret = os.getenv("APP_SECRET_STRING")
 
-    if not secret:
-        raise EnvironmentError("APP_SECRET_STRING environment variable not found")
+    def __init__(self):
+        self.secret = os.getenv("APP_SECRET_STRING")
+        if not self.secret:
+            raise EnvironmentError("APP_SECRET_STRING environment variable not found")
 
     def encode_password(self, password):
         return self.hasher.hash(password)
