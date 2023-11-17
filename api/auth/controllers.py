@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from database.query import query_put
 from auth.provider import Auth
 from auth.models import SignUpRequestModel
@@ -10,7 +10,9 @@ auth_handler = Auth()
 def register_user(user_model: SignUpRequestModel):
     user = get_user_by_email(user_model.email)
     if len(user) != 0:
-        raise HTTPException(status_code=409, detail="Email user already exist.")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail="Email already exists."
+        )
     hashed_password = auth_handler.encode_password(user_model.password)
     query_put(
         """

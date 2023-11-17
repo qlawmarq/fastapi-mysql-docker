@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from database.query import query_get, query_put
 from auth.provider import Auth
 from user.models import UserUpdateRequestModel
@@ -11,11 +11,12 @@ def update_user(user_model: UserUpdateRequestModel):
     existing_user = get_user_by_email(user_model.email)
     if existing_user and existing_user.id != user_model.id:
         raise HTTPException(
-            status_code=400, detail="Email is already in use by another user"
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email is already in use by another user",
         )
     # Update the user
     hashed_password = auth_handler.encode_password(user_model.password)
-    query_put(
+    return query_put(
         """
             UPDATE user
                 SET first_name = %s,
@@ -32,10 +33,6 @@ def update_user(user_model: UserUpdateRequestModel):
             user_model.id,
         ),
     )
-    user = get_user_by_id(user_model.id)
-    if len(user) == 0:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user[0]
 
 
 def get_all_users():

@@ -66,7 +66,8 @@ def update_user_api(
     """
     token = credentials.credentials
     if auth_handler.decode_token(token):
-        user = update_user(user_details)
+        update_user(user_details)
+        user = get_user_by_id(user_details.id)
         return JSONResponse(
             status_code=status.HTTP_200_OK, content=jsonable_encoder(user)
         )
