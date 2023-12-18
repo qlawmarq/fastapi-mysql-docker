@@ -9,7 +9,6 @@ from pydantic import BaseModel
 import os
 
 db_connector = DatabaseConnector()
-query_get = db_connector.query_get
 
 OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -125,7 +124,7 @@ class AuthProvider:
         return user
 
     def get_user_by_email(self, user_email: str) -> AuthUser:
-        user = query_get(
+        user = db_connector.query_get(
             """
             SELECT
                 user.id,
