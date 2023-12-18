@@ -1,7 +1,7 @@
 fastapi==0.105.0
 uvicorn==0.24.0.post1
 python-jose==3.3.0
-bcrypt==4.0.1
+bcrypt==4.1.2
 passlib[bcrypt]
 pymysql==1.1.0
 cryptography==41.0.7
