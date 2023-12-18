@@ -102,7 +102,6 @@ def get_user_by_id(id: int) -> dict:
         (id),
     )
     if len(users) == 0:
-        print("User not found in database: get_user_by_id")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )

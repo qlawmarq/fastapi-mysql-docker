@@ -6,10 +6,9 @@ from user.controllers import get_users_by_email
 
 auth_handler = AuthProvider()
 
-database = DatabaseConnector()
-
 
 def register_user(user_model: SignUpRequestModel):
+    database = DatabaseConnector()
     user = get_users_by_email(user_model.email)
     if len(user) != 0:
         raise HTTPException(

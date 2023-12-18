@@ -8,7 +8,8 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 import os
 
-query_get = DatabaseConnector().query_get
+db_connector = DatabaseConnector()
+query_get = db_connector.query_get
 
 OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="token")
 

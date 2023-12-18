@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 import os
 import pymysql.cursors
 from pymysql import converters
@@ -36,24 +37,28 @@ class DatabaseConnector:
         return connection
 
     def query_get(self, sql, param):
-        connection = self.get_connection()
-        with connection:
-            with connection.cursor() as cursor:
-                cursor.execute(sql, param)
-                return cursor.fetchall()
+        try:
+            connection = self.get_connection()
+            with connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(sql, param)
+                    return cursor.fetchall()
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Database error: " + str(e),
+            )
 
     def query_put(self, sql, param):
-        connection = self.get_connection()
-        with connection:
-            with connection.cursor() as cursor:
-                cursor.execute(sql, param)
-                connection.commit()
-                return cursor.lastrowid
-
-    def query_update(self, sql, param):
-        connection = self.get_connection()
-        with connection:
-            with connection.cursor() as cursor:
-                cursor.execute(sql, param)
-                connection.commit()
-                return True
+        try:
+            connection = self.get_connection()
+            with connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(sql, param)
+                    connection.commit()
+                    return cursor.lastrowid
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Database error: " + str(e),
+            )
