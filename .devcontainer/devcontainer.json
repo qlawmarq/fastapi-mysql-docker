@@ -1,0 +1,26 @@
+{
+  "name": "fastapi-app",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "api",
+  "workspaceFolder": "/app",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.flake8",
+        "ms-python.black-formatter",
+        "ms-vscode-remote.remote-containers"
+      ],
+      "settings": {
+        "files.encoding": "utf8",
+        "files.eol": "\n",
+        "editor.formatOnSave": true,
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter"
+        },
+        "flake8.args": ["--max-line-length=88", "--ignore=E203,W503,W504"]
+      }
+    }
+  },
+  "forwardPorts": [8000]
+}

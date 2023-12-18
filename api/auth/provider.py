@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
 from typing import Annotated
-from database import query_get
+from database.connector import DatabaseConnector
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 import os
+
+query_get = DatabaseConnector().query_get
 
 OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="token")
 

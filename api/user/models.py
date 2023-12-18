@@ -10,9 +10,13 @@ class UserUpdateRequestModel(BaseModel):
     last_name: str
 
     @validator("password")
-    def empty_str_to_none(cls, v):
-        if v == "":
+    def password_validator(cls, v):
+        # If the password is an empty string or None, set it to None
+        if v == "" or v is None:
             return None
+        # If length of password is less than 8, raise a validation error
+        if len(v) < 8:
+            raise ValueError("Password must be at least 8 characters long")
         return v
 
 

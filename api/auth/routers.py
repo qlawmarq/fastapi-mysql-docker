@@ -17,7 +17,7 @@ router = APIRouter()
 auth_handler = AuthProvider()
 
 
-@router.post("/v1/signup", response_model=UserAuthResponseModel)
+@router.post("/v1/auth/signup", response_model=UserAuthResponseModel)
 def signup_api(user_details: SignUpRequestModel):
     """
     This sign-up API allow you to register your account, and return access token.
@@ -36,7 +36,7 @@ def signup_api(user_details: SignUpRequestModel):
     )
 
 
-@router.post("/v1/signin", response_model=UserAuthResponseModel)
+@router.post("/v1/auth/signin", response_model=UserAuthResponseModel)
 def signin_api(user_details: SignInRequestModel):
     """
     This sign-in API allow you to obtain your access token.
@@ -55,7 +55,7 @@ def signin_api(user_details: SignInRequestModel):
     )
 
 
-@router.post("/v1/refresh-token", response_model=AccessTokenResponseModel)
+@router.post("/v1/auth/refresh-token", response_model=AccessTokenResponseModel)
 def refresh_token_api(refresh_token: str):
     """
     This refresh-token API allow you to obtain new access token.

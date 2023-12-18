@@ -1,9 +1,11 @@
 from fastapi import HTTPException, status
-from database.query import query_get, query_put
+from database.connector import DatabaseConnector
 from auth.provider import AuthProvider
 from user.models import UserUpdateRequestModel
 
 auth_handler = AuthProvider()
+
+database = DatabaseConnector()
 
 
 def update_user(user_model: UserUpdateRequestModel) -> int:
@@ -18,7 +20,7 @@ def update_user(user_model: UserUpdateRequestModel) -> int:
     if user_model.password is not None and len(user_model.password) > 0:
         hashed_password = auth_handler.get_password_hash(user_model.password)
         # Update the user
-        return query_put(
+        return database.query_put(
             """
                 UPDATE user
                     SET first_name = %s,
@@ -37,7 +39,7 @@ def update_user(user_model: UserUpdateRequestModel) -> int:
         )
     else:
         # Update the user
-        return query_put(
+        return database.query_put(
             """
                 UPDATE user
                     SET first_name = %s,
@@ -55,7 +57,7 @@ def update_user(user_model: UserUpdateRequestModel) -> int:
 
 
 def get_all_users(limit: int = 10, offset: int = 0) -> list[dict]:
-    users = query_get(
+    users = database.query_get(
         """
         SELECT
             user.id,
@@ -71,7 +73,7 @@ def get_all_users(limit: int = 10, offset: int = 0) -> list[dict]:
 
 
 def get_users_by_email(email: str) -> list[dict]:
-    users = query_get(
+    users = database.query_get(
         """
         SELECT
             user.id,
@@ -87,7 +89,7 @@ def get_users_by_email(email: str) -> list[dict]:
 
 
 def get_user_by_id(id: int) -> dict:
-    users = query_get(
+    users = database.query_get(
         """
         SELECT
             user.id,
@@ -100,6 +102,7 @@ def get_user_by_id(id: int) -> dict:
         (id),
     )
     if len(users) == 0:
+        print("User not found in database: get_user_by_id")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
