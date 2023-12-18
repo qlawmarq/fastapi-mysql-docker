@@ -8,58 +8,33 @@
 
 ---
 
-## Setup development environment
+## Setup development environment (Docker compose)
 
-Please install `Docker` and `Docker compose` first.
+Please install [`Docker` and `Docker compose`](https://www.docker.com/) first.
 
-https://www.docker.com/
+## Manual setup
 
 After installation, run the following command to create a local Docker container.
 
-```bash
-docker-compose build
-docker-compose up -d
-```
-
-If you want to check the log while Docker container is running, then try to use following command:
-
-```bash
+```sh
 docker-compose up
 ```
 
 If Docker is running successfully, the API and DB server will be launched as shown in the following:
 
 - API server: http://localhost:8000
+- API Docs: http://localhost:8000/v1/docs
 - DB server: http://localhost:3306
 
 _Be careful, it won't work if the port is occupied by another application._
 
-If you want to check docker is actually working, then you can check it with following command:
+## Setup with the VS Code Dev Containers extension
 
-```bash
-docker ps
-```
+The above setup can be used for development, but you can also setup dev env with using the [VS Code Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
 
-If you want to go inside of docker container, then try to use following command:
-
-```bash
-docker-compose exec mysql bash
-docker-compose exec api bash
-```
-
-For shutdown of the docker instance, please use following command:
-
-```bash
-docker-compose down
-```
-
-## Need a front-end app?
-
-If you need a front-end app for this server-side & DB server.
-
-You can clone the front-end template from:
-
-- https://github.com/qlawmarq/nuxt3-tailwind-auth-app
+- Install VS code and the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+- Run the `Dev Containers: Open Folder in Container...` command from the Command Palette or quick actions Status bar item, and select the project folder.
+- Wait until the building of the application is finished, then access the application url
 
 ---
 
@@ -69,29 +44,39 @@ You can clone the front-end template from:
 
 If you're [VS Code](https://code.visualstudio.com/) user, you can easily setup Python code formatter (black) and linter (flake8) by simply installing the extensions.
 
-Automatic formatting settings have already been defined here:
-
-`.vscode/settings.json`
+Automatic formatting settings have already been defined [`.vscode/settings.json`](./.vscode/settings.json).
 
 Just install following:
 
 - [Black Formatter](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter)
 - [Flake8](https://marketplace.visualstudio.com/items?itemName=ms-python.flake8)
 
+If you are using the Dev Container, this configuration is already done in [the Dev Container settings](./.devcontainer/devcontainer.json), so you can skip it.
+
 ### How to check the DB tables in container
 
-You can check the DB data by actually executing a query using the following command:
+Use following command to go inside of docker container:
 
-```bash
-docker-compose exec mysql bash
+```sh
+docker-compose exec mysql sh
+```
+
+Then use `mysql` command to execute a query:
+
+```sh
 mysql -u root -p
 mysql> USE fastapi_app;
 mysql> SHOW TABLES;
+mysql> SELECT * FROM user;
 ```
+
+Your initial MySQL password is defined in `mysql/local.env`.
 
 ### How to add a library
 
-You may want to add libraries such as requests, in which case follow these steps:
+Python libraries used in this app are defined in `api/requirements.txt`.
+
+Also you may want to add libraries such as requests, in which case follow these steps:
 
 - Add the library to requirements.txt
 
@@ -103,23 +88,15 @@ requests==2.30.0
 
 Then try a re-build and see.
 
-```
+```sh
+docker-compose down
 docker-compose build
 docker-compose up
 ```
 
-### Python library packages
-
-Some of the Python packages used in this app are defined in `api/requirements.txt`.
-Also you can add other packages there.
-
 ### Environment variable
 
-Some of environment variable, like a database name and user is defined in `docker-compose.yml`.
-You can customize it as you like.
-
-If you will use docker, then please define your environment variable to `docker-compose.yml`.
-However, you will NOT use docker, then please create `.env` file for your API server.
+Some of environment variable, like a database name and user is defined in `docker-compose.yml` or `Dockerfile`.
 
 ### DB Migrations
 
@@ -130,10 +107,21 @@ The sample table definition has already been created with the name `create_user_
 
 ### Save the local DB changes as a dump file
 
-```bash
+If you need to share local DB changes with other developers, you can use `mysqldump` to create a backup and share it with them.
+
+To create a `dump.sql', run the following command:
+
+```sh
 docker-compose exec database mysqldump -u root -p fastapi_app > mysql/db/dump.sql
 ```
 
-### API documentation
+Then, to reinitialize the DB, remove the named volumes declared in the "volumes" section of the Compose file.
 
-http://localhost:8000/redoc
+https://docs.docker.com/engine/reference/commandline/compose_down/
+
+```sh
+docker-compose down -v
+```
+
+Then, run `docker-compose up` to launch the development environment.  
+And confirm that your DB changes are reflected.
