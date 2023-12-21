@@ -33,6 +33,7 @@ _Be careful, it won't work if the port is occupied by another application._
 The above setup can be used for development, but you can also setup dev env with using the [VS Code Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
 
 - Install VS code and the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+- [Optional] To share git credential, run `ssh-add $HOME/.ssh/your_ssh_rsa`. See following for more info: https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials
 - Run the `Dev Containers: Open Folder in Container...` command from the Command Palette or quick actions Status bar item, and select the project folder.
 - Wait until the building of the application is finished, then access the application url
 
