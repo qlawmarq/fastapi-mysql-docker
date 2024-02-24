@@ -4,5 +4,5 @@ python-jose==3.3.0
 bcrypt==4.0.1
 passlib[bcrypt]
 pymysql==1.1.0
-cryptography==41.0.7
+cryptography==42.0.5
 pydantic[email]==2.5.2
