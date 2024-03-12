@@ -5,4 +5,4 @@ bcrypt==4.0.1
 passlib[bcrypt]
 pymysql==1.1.0
 cryptography==41.0.7
-pydantic[email]==2.5.2
+pydantic[email]==2.6.4
